@@ -81,7 +81,7 @@ def _mapped_step(model, solutions, inputs_dict, integrator, variables, t_eval):
     return sol, var_eval
 
 
-def _create_casadi_objects(I_init, htc, sim, dt, Nspm, nproc, variable_names):
+def _create_casadi_objects(I_init, htc,initial_eleConc, sim, dt, Nspm, nproc, variable_names):
     """
     Internal function to produce the casadi objects in their mapped form for
     parallel evaluation
@@ -120,7 +120,7 @@ def _create_casadi_objects(I_init, htc, sim, dt, Nspm, nproc, variable_names):
     """
     inputs = {
         "Current function [A]": I_init,
-        "Total heat transfer coefficient [W.m-2.K-1]": htc,
+        "Total heat transfer coefficient [W.m-2.K-1]": htc,"Initial concentration in electrolyte [mol.m-3]": initial_eleConc,
     }
     solver = sim.solver
 
@@ -165,7 +165,7 @@ def solve(
     parameter_values=None,
     experiment=None,
     I_init=1.0,
-    htc=None,
+    htc=None,initial_eleConc=None,
     initial_soc=0.5,
     nproc=12,
     output_variables=None,
@@ -253,7 +253,7 @@ def solve(
 
     # Set up integrator
     integrator, variables_fn, t_eval = _create_casadi_objects(
-        I_init, htc[0], sim, dt, Nspm, nproc, variable_names
+        I_init, htc[0],initial_eleConc[0], sim, dt, Nspm, nproc, variable_names
     )
 
     # Step forward in time
@@ -273,7 +273,7 @@ def solve(
         step_solutions, var_eval = _mapped_step(
             sim.built_model,
             step_solutions,
-            lp.build_inputs_dict(shm_i_app[step, :], htc),
+            lp.build_inputs_dict(shm_i_app[step, :], htc,initial_eleConc),
             integrator,
             variables_fn,
             t_eval,
