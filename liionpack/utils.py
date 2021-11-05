@@ -197,7 +197,7 @@ def get_interpolated_htc(funcs, T, Q):
     return htc
 
 
-def build_inputs_dict(I_batt, htc):
+def build_inputs_dict(I_batt, htc,initial_eleConc):
     r"""
     Function to convert inputs and external_variable arrays to list of dicts
     As expected by the casadi solver. These are then converted back for mapped
@@ -226,6 +226,7 @@ def build_inputs_dict(I_batt, htc):
                 # 'Volume-averaged cell temperature': T_batt[i],
                 "Current": I_batt[i],
                 "Total heat transfer coefficient [W.m-2.K-1]": htc[i],
+                "Initial concentration in electrolyte [mol.m-3]": initial_eleConc[i],
             }
         )
     return inputs_dict
