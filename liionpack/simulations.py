@@ -46,6 +46,7 @@ def create_simulation(parameter_values=None, experiment=None, make_inputs=False)
             {
                 "Current function [A]": "[input]",
                 "Total heat transfer coefficient [W.m-2.K-1]": "[input]",
+                "Initial concentration in electrolyte [mol.m-3]":"[input]",
             },
         )
 
